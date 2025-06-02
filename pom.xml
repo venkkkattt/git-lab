@@ -5,72 +5,82 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>mvnproject1</artifactId>
+    <artifactId>two</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-
-
-    <properties>
-        <maven.compiler.source>24</maven.compiler.source>
-        <maven.compiler.target>24</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-
-            <version>3.141.59</version>
-            </dependency>
+            <version>4.28.1</version>
+        </dependency>
         <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <version>7.4.0</version>
-
-
-        <scope>test</scope>
-    </dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.4.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
-    <plugins>
-    <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-resources-plugin</artifactId>
-    <version>3.2.0</version>
-    <executions>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <archive>
+                    <manifestEntries>
+                        <Main-Class>org.example.Main</Main-Class>
+                    </manifestEntries>
+                </archive>
+            </configuration>
+        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/docs</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.12.1</version>
+            </plugin>
 
-    <execution>
-    <phase>prepare-package</phase>
-    <goals>
-
-    <goal>copy-resources</goal>
-    </goals>
-    <configuration>
-    <outputDirectory>${project.basedir}/docs</outputDirectory>
-    <resources>
-        <resource>
-            <directory>src/main/resources</directory>
-            <includes>
-
-            <include>**/*</include>
-
-        </includes>
-
-        </resource>
-
-    </resources>
-    </configuration>
-
-    </execution>
-
-    </executions>
-
-    </plugin>
-
-    </plugins>
-
+        </plugins>
     </build>
+
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>local-repo</id>
+            <url>file:///D:/my-local-maven-repo</url>
+        </repository>
+    </distributionManagement>
 
 </project>
