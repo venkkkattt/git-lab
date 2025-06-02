@@ -6,7 +6,7 @@ plugins {
     application
 }
 
-group = "com.example"
+group = "org.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -26,16 +26,19 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "17"
 }
+
+
+
 application {
-    mainClass.set("com.example.Main")
+    mainClass.set("org.example.MainKt")
 }
 
 tasks.register<Jar>("fatJar") {
     archiveClassifier.set("all")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-            manifest {
-        attributes["Main-Class"] = "com.example.Main"
-        }
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt"
+    }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 
     with(tasks.jar.get() as CopySpec)
