@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>p1</artifactId>
+    <artifactId>two</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -25,6 +25,18 @@
     <build>
         <plugins>
             <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <archive>
+                    <manifestEntries>
+                        <Main-Class>org.example.Main</Main-Class>
+                    </manifestEntries>
+                </archive>
+            </configuration>
+        </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
@@ -35,12 +47,12 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.basedir}/docs</outputDirectory> <!-- Deploy to /docs folder -->
+                            <outputDirectory>${project.basedir}/docs</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/resources</directory>
                                     <includes>
-                                        <include>**/*</include> <!-- Copy all files in src/main/resources -->
+                                        <include>**/*</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -48,16 +60,12 @@
                     </execution>
                 </executions>
             </plugin>
-                 <plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-site-plugin</artifactId>
-<version>3.12.1</version> 
-</plugin>
-                 <build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.12.1</version>
+            </plugin>
 
-
-
-           
         </plugins>
     </build>
 
@@ -68,16 +76,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-         <distributionManagement>
-
-<repository>
-
-<id>local-repo</id>
-
-<url>file:///D:/my-local-maven-repo</url>
-
-
-</repository>
-</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>local-repo</id>
+            <url>file:///D:/my-local-maven-repo</url>
+        </repository>
+    </distributionManagement>
 
 </project>
