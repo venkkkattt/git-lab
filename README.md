@@ -1,3 +1,171 @@
+1
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing
+
+ch = fetch_california_housing()
+data = pd.DataFrame(ch.data, columns = ch.feature_names)
+nf = data.select_dtypes(include = [np.number]).columns
+print(nf)
+data.hist(bins = 30, figsize = (12,7), color = 'blue')
+plt.suptitle("Histograms")
+plt.tight_layout()
+plt.show()
+plt.figure(figsize = (15,9))
+for i, column in enumerate(data.columns,1):
+    plt.subplot(3,3,i)
+    sns.boxplot(y = data[column])
+    plt.title(f'Boxplot of {column}')
+plt.tight_layout()
+plt.show()
+print("Outliers detection")
+os = {}
+for feature in nf:
+    q1 = data[feature].quantile(0.25)
+    q3 = data[feature].quantile(0.75)
+    iqr = q3 - q1
+    lb = q1 - 1.5 * iqr
+    ub = q3 + 1.5 * iqr
+    outliers = data[(data[feature] < lb) | (data[feature] > ub)]
+    os[feature] = len(outliers)
+    print(f'{feature} : {len(outliers)}')
+
+2
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing
+
+ch = fetch_california_housing()
+data = pd.DataFrame(ch.data, columns = ch.feature_names)
+
+comx = data.corr()
+print(comx)
+plt.figure(figsize = (8,6))
+sns.heatmap(comx, annot = True, cmap = 'crest', fmt = '.2f')
+plt.title("Heatmap")
+plt.show()
+plt.figure()
+sns.pairplot(data, kind = 'scatter', diag_kind = 'kde', plot_kws = {'alpha':0.5})
+plt.show()
+
+
+3
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+
+iris = load_iris()
+X = iris.data
+Y = iris.target
+ln = iris.target_names
+data = pd.DataFrame(iris.data, columns = iris.feature_names)
+pca = PCA(n_components = 2)
+pc = pca.fit_transform(X)
+
+df_pca = pd.DataFrame(data=pc, columns = ['PC1','PC2'] )
+df_pca['Target'] = Y
+df_pca
+plt.figure(figsize=(6,4))
+colors = ['y','b','g']
+for i, label in enumerate(np.unique(Y)):
+    plt.scatter(df_pca[df_pca['Target'] == label]['PC1'],df_pca[df_pca['Target'] == label]['PC2'], label = ln[label], color = colors[i])
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+plt.show()
+
+
+4
+import csv
+a = []
+with open ('enjoysport.csv','r') as csvfile:
+    for row in csv.reader(csvfile):
+        a.append(row)
+        print(a)
+
+print('the num of training instances are ', len(a))
+num = len(a[0])-1
+hypothesis = ['0'] * num
+print('the initial hypothesis is \n ', hypothesis)
+
+for i in range (0, len(a)):
+    if a[i][num] == 'yes':
+        for j in range(0, num):
+            if hypothesis[j] == '0' or hypothesis[j] == a[i][j]:
+                hypothesis[j] = a[i][j]
+            else:
+                hypothesis[j] = '?'
+    print(f'the hypothesis for training instance {i+1} is \n {hypothesis}')
+print('the maximally specific hypothesis is \n', hypothesis)
+
+
+5
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+
+data = np.random.rand(100)
+labels = ["class1" if x <= 0.5 else "class2" for x in data[:50]]
+
+def euc(x1,x2):
+    return abs(x1 - x2)
+
+def knn(trainData, trainLabels, testPoint, k):
+    distances = [(euc(testPoint, trainData[i]),trainLabels[i]) for i in range(len(trainData))]
+    distances.sort(key = lambda x : x[0])
+    kn = distances[:k]
+    kl = [label for _, label in kn]
+    return Counter(kl).most_common(1)[0][0]
+
+trainData = data[:50]
+trainLabels = labels
+testData = data[50:]
+kV = [1,2,3,4,5,20,30]
+
+res = {}
+for k in kV:
+    print(f'results for {k}')
+    cl = [knn(trainData, trainLabels, testPoint, k) for testPoint in testData]
+    res[k] = cl
+
+    for i, label in enumerate(cl, start = 51):
+        print(f'point x{i} : the clssified label for the value {testData[i-51]:.4f} is {label}')
+    print('\n')
+
+print('classification completed')
+
+numk = len(kV)
+rows = (numk + 2) // 3
+cols = 3
+
+plt.figure(figsize = (15, 5 * rows))
+
+for idx, k in enumerate(kV):
+    cl = res[k]
+    c1p = [testData[i] for i in range(len(testData)) if cl[i] == 'class1']
+    c2p = [testData[i] for i in range(len(testData)) if cl[i] == 'class2']
+
+    plt.subplot(rows, cols, idx + 1)
+    plt.scatter(trainData, [0] * len(trainData), c = ["blue" if label == 'class1' else 'red' for label in trainLabels], label = 'train data', marker = 'o')
+    plt.scatter(c1p, [1] * len(c1p), c = 'blue', label = 'class1 test', marker = 'x')
+    plt.scatter(c2p, [1] * len(c2p), c = "red", label = 'class2 test', marker = 'x')
+
+    plt.title(f'knn plot for {k}')
+    plt.xlabel('Data points')
+    plt.ylabel('classification level')
+    plt.legend()
+    plt.grid()
+
+plt.tight_layout()
+plt.show()
+
+
 P6
 from os import listdir
 import pandas as pd
