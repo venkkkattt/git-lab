@@ -6,7 +6,7 @@ plugins {
     application
 }
 
-group = "org.example"
+group = "com.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -30,14 +30,14 @@ tasks.withType<KotlinCompile> {
 
 
 application {
-    mainClass.set("org.example.MainKt")
+    mainClass.set("com.example.MainKt")
 }
 
 tasks.register<Jar>("fatJar") {
     archiveClassifier.set("all")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
+        attributes["Main-Class"] = "com.example.MainKt"
     }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 
